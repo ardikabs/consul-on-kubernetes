@@ -1,0 +1,104 @@
+version: '3'
+services:
+  proxy:
+    image: nginx:alpine
+    container_name: proxy
+    networks:
+    - consul
+    ports:
+    - 80:80
+    - 443:443
+    volumes:
+    - $PWD/tls:/etc/tls
+    - $PWD/.sandbox/proxy/default.conf:/etc/nginx/conf.d/default.conf
+  consul-server-0:
+    image: ardikabs/consul:1.7.2
+    container_name: consul-server-0
+    networks:
+    - consul
+    environment:
+      CONSUL_CACERT: /etc/tls/ca.pem
+      CONSUL_CLIENT_CERT: /etc/tls/server.pem
+      CONSUL_CLIENT_KEY: /etc/tls/server-key.pem
+      CONSUL_HTTP_ADDR: https://127.0.0.1:8501
+    entrypoint:
+    - consul
+    - agent
+    - -node=srv.earth
+    - -config-dir=/consul/consul.d
+    - -bootstrap-expect=3
+    volumes:
+    - $PWD/tls:/etc/tls
+    - $PWD/.sandbox/server/consul.d:/consul/consul.d
+    - $PWD/.sandbox/policies:/consul/policies
+  consul-server-1:
+    image: ardikabs/consul:1.7.2
+    container_name: consul-server-1
+    networks:
+    - consul
+    environment:
+      CONSUL_CACERT: /etc/tls/ca.pem
+      CONSUL_CLIENT_CERT: /etc/tls/server.pem
+      CONSUL_CLIENT_KEY: /etc/tls/server-key.pem
+      CONSUL_HTTP_ADDR: https://127.0.0.1:8501
+    entrypoint:
+    - consul
+    - agent
+    - -node=srv.water
+    - -config-dir=/consul/consul.d
+    - -bootstrap-expect=3
+    volumes:
+    - $PWD/tls:/etc/tls
+    - $PWD/.sandbox/server/consul.d:/consul/consul.d
+    - $PWD/.sandbox/policies:/consul/policies
+  consul-server-2:
+    image: ardikabs/consul:1.7.2
+    container_name: consul-server-2
+    networks:
+    - consul
+    environment:
+      CONSUL_CACERT: /etc/tls/ca.pem
+      CONSUL_CLIENT_CERT: /etc/tls/server.pem
+      CONSUL_CLIENT_KEY: /etc/tls/server-key.pem
+      CONSUL_HTTP_ADDR: https://127.0.0.1:8501
+    entrypoint:
+    - consul
+    - agent
+    - -node=srv.fire
+    - -config-dir=/consul/consul.d
+    - -bootstrap-expect=3
+    volumes:
+    - $PWD/tls:/etc/tls
+    - $PWD/.sandbox/server/consul.d:/consul/consul.d
+    - $PWD/.sandbox/policies:/consul/policies
+
+
+  consul-cl000:
+    image: ardikabs/consul:1.7.2
+    container_name: consul-cl000
+    networks:
+    - consul
+    entrypoint:
+    - consul
+    - agent
+    - -node=cl000
+    - -config-dir=/consul/consul.d
+    volumes:
+    - $PWD/tls:/etc/tls
+    - $PWD/.sandbox/client/consul.d:/consul/consul.d
+
+  consul-cl001:
+    image: ardikabs/consul:1.7.2
+    container_name: consul-cl001
+    networks:
+    - consul
+    entrypoint:
+    - consul
+    - agent
+    - -node=cl001
+    - -config-dir=/consul/consul.d
+    volumes:
+    - $PWD/tls:/etc/tls
+    - $PWD/.sandbox/client/consul.d:/consul/consul.d
+networks:
+  consul:

@@ -1,5 +1,5 @@
 {
-  "CN": "server.dc1.cluster.local",
+  "CN": "localhost",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -8,13 +8,14 @@
     {
       "C": "ID",
       "L": "Jakarta",
-      "O": "Ard Labs",
-      "OU": "Consul",
+      "O": "Ardika Labs",
+      "OU": "Nginx Proxy",
       "ST": "Jakarta Selatan"
     }
   ],
   "hosts": [
-    "server.dc1.cluster.local",
+    "consul.poc.ardikabs.com",
+    "localhost",
     "127.0.0.1"
   ]
 }

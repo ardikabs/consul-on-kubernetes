@@ -1,5 +1,5 @@
 {
-  "CN": "Kubernetes",
+  "CN": "Ardika Labs Root CA",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -8,12 +8,12 @@
     {
       "C": "ID",
       "L": "Jakarta",
-      "O": "Kubernetes",
-      "OU": "CA",
+      "O": "Ardika Labs",
+      "OU": "ardikabs.com",
       "ST": "Jakarta Selatan"
     }
   ],
-  "hosts": [
-    "cluster.local"
-  ]
+  "ca": {
+    "expiry": "438000h"
+  }
 }

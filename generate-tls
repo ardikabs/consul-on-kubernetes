@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cfssl gencert -initca csr/ca.csr.json | cfssljson -bare tls/ca
+cfssl gencert -ca=tls/ca.pem -ca-key=tls/ca-key.pem -config=csr/config.json -profile=default csr/server.csr.json | cfssljson -bare tls/server
+cfssl gencert -ca=tls/ca.pem -ca-key=tls/ca-key.pem -config=csr/config.json -profile=default csr/client.csr.json | cfssljson -bare tls/client
+cfssl gencert -ca=tls/ca.pem -ca-key=tls/ca-key.pem -config=csr/config.json -profile=default csr/nginx.csr.json | cfssljson -bare tls/nginx
