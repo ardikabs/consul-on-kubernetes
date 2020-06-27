@@ -12,11 +12,11 @@ kubectl create ns consul
 
 kubectl create secret -n consul generic consul \
   --from-literal="gossip-encryption-key=${GOSSIP_ENCRYPTION_KEY}" \
-  --from-file=ca.pem \
-  --from-file=server.pem \
-  --from-file=server-key.pem
+  --from-file=tls/ca.pem \
+  --from-file=tls/consul-server.pem \
+  --from-file=tls/consul-server-key.pem
 
-kubectl create configmap -n consul consul --from-file=configs/server.json
+kubectl create configmap -n consul consul --from-file=configs/consul-server.json
 
 # Create the Consul Headless Service
 kubectl create -n consul -f services/consul.yaml
@@ -26,7 +26,10 @@ kubectl apply -n consul -f serviceaccounts/consul.yaml
 kubectl apply -n consul -f clusterroles/consul.yaml
 
 # Create Persistent Volumes
-kubectl apply -n consul -f persistentvolumes
+kubectl apply -n consul -f persistentvolumes/
 
 # Deploy StatefulSet Consul
 kubectl create -n consul -f statefulsets/consul.yaml
+
+# Deploy PodDisruptionBudget for Consul
+kubectl create -n consul -f poddisruptionbudget/consul.yaml
